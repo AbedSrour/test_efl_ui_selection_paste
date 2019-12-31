@@ -3,6 +3,9 @@
 #include <Efl_Ui.h>
 #include <Elementary.h>
 
+// #define USE_EFL_UI_TEXTBOX_METHOD
+#define SHOW_BUG
+
 static void
 _copy_click_callback(void *data, const Efl_Event *event EINA_UNUSED)
 {
@@ -78,10 +81,20 @@ efl_main(void *data EINA_UNUSED, const Efl_Event *ev EINA_UNUSED)
 
    // efl_text_interactive_all_select(input);
 
-   // efl_ui_textbox_selection_paste(input);
-   // efl_ui_textbox_selection_paste(input);
-
+#ifdef USE_EFL_UI_TEXTBOX_METHOD
+   efl_ui_textbox_selection_paste(input);
+#ifdef SHOW_BUG
+   efl_ui_textbox_selection_paste(input);
+#endif
+#else
+   // or use this callback which is called in efl_ui_textbox_selection_paste method!
    efl_ui_selection_get(input, EFL_UI_SELECTION_TYPE_CLIPBOARD, EFL_UI_SELECTION_FORMAT_MARKUP,
          NULL, _selection_data_cb, NULL, 1);
+
+#ifdef SHOW_BUG
+   efl_ui_selection_get(input, EFL_UI_SELECTION_TYPE_CLIPBOARD, EFL_UI_SELECTION_FORMAT_MARKUP,
+         NULL, _selection_data_cb, NULL, 1);
+#endif
+#endif
 }
 EFL_MAIN()
