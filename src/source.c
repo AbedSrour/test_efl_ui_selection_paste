@@ -4,8 +4,8 @@
 #include <Elementary.h>
 
 static void
-_selection_data_cb(void *data EINA_UNUSED, Eo *obj,
-                   Efl_Ui_Selection_Data *sel_data)
+_selection_data_cb(void *data EINA_UNUSED, Eo *obj EINA_UNUSED,
+                   Efl_Ui_Selection_Data *sel_data EINA_UNUSED)
 {
    printf("_selection_data_cb called\n");
 }
@@ -24,7 +24,7 @@ _paste_click_callback(void *data, const Efl_Event *event EINA_UNUSED)
    Eo *tb = (Eo*) data;
    efl_ui_selection_get(tb, EFL_UI_SELECTION_TYPE_CLIPBOARD, EFL_UI_SELECTION_FORMAT_TEXT | EFL_UI_SELECTION_FORMAT_MARKUP,
          NULL, _selection_data_cb, NULL, 1);
-   efl_ui_selection_get(tb, EFL_UI_SELECTION_TYPE_CLIPBOARD, EFL_UI_SELECTION_FORMAT_MARKUP,
+   efl_ui_selection_get(tb, EFL_UI_SELECTION_TYPE_CLIPBOARD, EFL_UI_SELECTION_FORMAT_TEXT | EFL_UI_SELECTION_FORMAT_MARKUP,
          NULL, _selection_data_cb, NULL, 1);
 }
 
@@ -37,7 +37,7 @@ _quit_cb(void *data EINA_UNUSED, const Efl_Event *event EINA_UNUSED)
 EAPI_MAIN void
 efl_main(void *data EINA_UNUSED, const Efl_Event *ev EINA_UNUSED)
 {
-   Eo *win, *box, *input;
+   Eo *win, *box;
 
    win = efl_add(EFL_UI_WIN_CLASS, efl_main_loop_get(),
                   efl_text_set(efl_added, "Hello world"),
@@ -60,7 +60,6 @@ efl_main(void *data EINA_UNUSED, const Efl_Event *ev EINA_UNUSED)
             efl_event_callback_add(efl_added, EFL_INPUT_EVENT_CLICKED, _paste_click_callback, btn),
             efl_pack(box, efl_added));
 
-   // or use this callback which is called in efl_ui_textbox_selection_paste method!
    efl_ui_selection_get(btn, EFL_UI_SELECTION_TYPE_CLIPBOARD, EFL_UI_SELECTION_FORMAT_MARKUP,
          NULL, _selection_data_cb, NULL, 1);
 
